@@ -4,7 +4,7 @@ use parquet_io_accelerator::compression::{
 };
 use rand::{prelude::SmallRng, RngCore, SeedableRng};
 
-fn bench_compress<T: Compression>(group: &mut BenchmarkGroup<WallTime>, input: &[u8]) {
+fn bench_compression<T: Compression>(group: &mut BenchmarkGroup<WallTime>, input: &[u8]) {
     // Allocate output buffer
     let mut compressed_output = vec![0; 2 * input.len()];
 
@@ -51,13 +51,13 @@ pub(super) fn bench(c: &mut Criterion) {
             *x = (*x).clamp(0, 100);
         });
 
-        bench_compress::<Uncompressed>(&mut group, &input);
-        bench_compress::<Snappy>(&mut group, &input);
-        bench_compress::<GZIP<1>>(&mut group, &input);
-        bench_compress::<LZO>(&mut group, &input);
-        bench_compress::<Brotli<4096, 1, 22>>(&mut group, &input);
-        bench_compress::<LZ4>(&mut group, &input);
-        bench_compress::<Zstd<1>>(&mut group, &input);
+        bench_compression::<Uncompressed>(&mut group, &input);
+        bench_compression::<Snappy>(&mut group, &input);
+        bench_compression::<GZIP<1>>(&mut group, &input);
+        bench_compression::<LZO>(&mut group, &input);
+        bench_compression::<Brotli<4096, 1, 22>>(&mut group, &input);
+        bench_compression::<LZ4>(&mut group, &input);
+        bench_compression::<Zstd<1>>(&mut group, &input);
     }
 
     group.finish();
